@@ -6,16 +6,20 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = 25
+WORK_MIN = 1
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 30
 reps = 0
 timer = None
+IT = 0
 
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 def reset_timer():
+    global IT
     global reps
+    IT = 0
+    start_button.config(fg="black")
     window.after_cancel(timer)
     timer_label.config(text="Timer")
     canvas.itemconfig(timer_text, text="00:00")
@@ -25,22 +29,26 @@ def reset_timer():
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
-    window.attributes('-topmost', True)
-    window.attributes('-topmost', False)
-    global reps
-    reps += 1
-    work_sec = WORK_MIN * 60
-    short_break = SHORT_BREAK_MIN * 60
-    long_break = LONG_BREAK_MIN * 60
-    if reps % 8 == 0:
-        count_down(long_break)
-        timer_label.config(text="BREAK", fg=RED)
-    elif reps % 2 == 0 and reps < 7:
-        count_down(short_break)
-        timer_label.config(text="BREAK", fg=PINK)
-    else:
-        count_down(work_sec)
-        timer_label.config(text="WORK", fg=GREEN)
+    global IT
+    if IT == 0:
+        IT = 1
+        start_button.config(fg="grey")
+        window.attributes('-topmost', True)
+        window.attributes('-topmost', False)
+        global reps
+        reps += 1
+        work_sec = WORK_MIN * 60
+        short_break = SHORT_BREAK_MIN * 60
+        long_break = LONG_BREAK_MIN * 60
+        if reps % 8 == 0:
+            count_down(long_break)
+            timer_label.config(text="BREAK", fg=RED)
+        elif reps % 2 == 0 and reps < 7:
+            count_down(short_break)
+            timer_label.config(text="BREAK", fg=PINK)
+        else:
+            count_down(work_sec)
+            timer_label.config(text="WORK", fg=GREEN)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 
